@@ -1,17 +1,20 @@
-import Link from "next/link";
-import React from "react";
+import { useState } from "react";
+import EditModal from "./EditModal";
+import { Budgets } from "../../../../../../utils/schema";
 
 function BudgetItem({ budget }) {
+  const [open, setOpen] = useState(false);
   const calculateProgressPerc = () => {
     const perc = (budget.totalSpend / budget.amount) * 100;
     return perc > 100 ? 100 : perc.toFixed(2);
   };
-  
+
   return (
-    <Link href={"/dashboard/expenses/" + budget?.id}>
+    <>
+      <EditModal open={open} setOpen={setOpen} obj={budget} Table={Budgets} />
       <div
-        className="p-5 border rounded-2xl
-    hover:shadow-md duration-150 ease-in-out cursor-pointer h-[170px] min-w-[300px] md:min-w-[390px]"
+        onClick={() => setOpen(true)}
+        className="p-5 border rounded-2xl hover:shadow-md duration-150 ease-in-out cursor-pointer h-[170px] min-w-[300px] md:min-w-[390px]"
       >
         <div className="flex gap-2 items-center justify-between">
           <div className="flex gap-2 items-center">
@@ -20,14 +23,17 @@ function BudgetItem({ budget }) {
               bg-slate-100 rounded-full 
               "
             >
-              {budget.Icon}
+              {budget?.Icon}
             </h2>
             <div>
               <h2 className="font-bold">{budget.name}</h2>
               <h2 className="text-sm text-gray-500">{budget.totalItem} Item</h2>
             </div>
           </div>
-          <h2 className="font-bold text-primary text-lg"> Rs. {budget.amount}</h2>
+          <h2 className="font-bold text-primary text-lg">
+            {" "}
+            Rs. {budget.amount}
+          </h2>
         </div>
 
         <div className="mt-5">
@@ -53,7 +59,7 @@ function BudgetItem({ budget }) {
           </div>
         </div>
       </div>
-    </Link>
+    </>
   );
 }
 

@@ -63,7 +63,7 @@ const page = () => {
             <div className="w-full lg:w-1/3 min-w-[350px] flex flex-wrap gap-6 p-4">
               <h1 className="text-2xl font-semibold">Latest Budgets</h1>
               <div className="flex flex-wrap gap-4">
-                {[budgetList[0], budgetList[1]].map((budget, index) => (
+                {budgetList.slice(0,2).map((budget, index) => (
                   <BudgetItem budget={budget} key={index} />
                 ))}
               </div>

@@ -26,16 +26,12 @@ function CreateBudget({ refreshData }) {
   const [amount, setAmount] = useState();
 
   const { user } = useUser();
-
-  /**
-   * Used to Create New Budget
-   */
   const onCreateBudget = async () => {
     const result = await db.insert(Budgets).values({
       name: name,
       amount: amount,
       createdBy: user?.primaryEmailAddress?.emailAddress,
-      icon: emojiIcon,
+      Icon: emojiIcon,
     });
 
     if (result) {
