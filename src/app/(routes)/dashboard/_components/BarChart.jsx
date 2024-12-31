@@ -9,10 +9,10 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  Cell,
 } from "recharts";
 
 const BarChart = ({ budgetList }) => {
-
   return (
     <div className="w-full flex flex-col md:p-4">
       <div className="p-2 md:p-0">
@@ -32,8 +32,17 @@ const BarChart = ({ budgetList }) => {
             />
             <Tooltip />
             <Legend />
-            <Bar dataKey={"totalSpend"} stackId="a" fill="#45d248" />
-            <Bar dataKey={"amount"} stackId="a" fill="#4845d2" />
+            <Bar dataKey="totalSpend" stackId="b" fill="#45d248">
+              {budgetList.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={
+                    entry.amount - entry.totalSpend < 0 ? "#d24545" : "#45d248"
+                  }
+                />
+              ))}
+            </Bar>
+            <Bar dataKey="amount" stackId="a" fill="#4845d2" />
           </RechartsBarChart>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-2xl font-semibold">

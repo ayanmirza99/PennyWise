@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -21,7 +20,6 @@ import { Trash } from "lucide-react";
 const EditModal = ({ open, setOpen, obj, Table }) => {
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const { getBudgetList, getIncomeList } = useGlobalContext();
-  console.log(obj);
 
   const {
     control,
@@ -51,7 +49,8 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
           Icon: data.Icon,
         })
         .where(eq(Table.id, data.id));
-      toast.success(`${Table === "Budgets" ? "Budget" : "Expense"} Updated!`);
+
+      toast.success(`${Table === "Budgets" ? "Budget" : "Income"} Updated!`);
       if (Table === "Budgets") {
         await getBudgetList();
       } else {
@@ -59,7 +58,7 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
       }
     } catch (error) {
       toast.error(
-        `Error Updating ${Table === "Budgets" ? "Budget" : "Expense"}!`
+        `Error Updating ${Table === "Budgets" ? "Budget" : "Income"}!`
       );
     } finally {
       setOpen(false);
@@ -88,93 +87,91 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Budget</DialogTitle>
-          <DialogDescription>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-              <div>
-                <Controller
-                  name={"Icon"}
-                  control={control}
-                  rules={{ required: "Icon is required" }}
-                  render={({ field }) => (
-                    <div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="text-lg"
-                        onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
-                      >
-                        {field.value || "Select Icon"}
-                      </Button>
-                      {openEmojiPicker && (
-                        <div className="absolute z-20">
-                          <EmojiPicker
-                            onEmojiClick={(emojiObject) => {
-                              field.onChange(emojiObject.emoji);
-                              setOpenEmojiPicker(false);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                />
-                {errors.Icon && (
-                  <p className="text-red-500 pt-1 text-sm">
-                    {errors.Icon.message}
-                  </p>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+            <div>
+              <Controller
+                name={"Icon"}
+                control={control}
+                rules={{ required: "Icon is required" }}
+                render={({ field }) => (
+                  <div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="text-lg"
+                      onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
+                    >
+                      {field.value || "Select Icon"}
+                    </Button>
+                    {openEmojiPicker && (
+                      <div className="absolute z-20">
+                        <EmojiPicker
+                          onEmojiClick={(emojiObject) => {
+                            field.onChange(emojiObject.emoji);
+                            setOpenEmojiPicker(false);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
-              </div>
+              />
+              {errors.Icon && (
+                <p className="text-red-500 pt-1 text-sm">
+                  {errors.Icon.message}
+                </p>
+              )}
+            </div>
 
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Budget Name
-                </label>
-                <Input
-                  id="name"
-                  {...register("name", { required: "Budget name is required" })}
-                  placeholder="e.g., Home Decor"
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="amount"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Budget Amount
-                </label>
-                <Input
-                  id="amount"
-                  type="number"
-                  {...register("amount", {
-                    required: "Budget amount is required",
-                    valueAsNumber: true,
-                    validate: (value) =>
-                      value > 0 || "Budget amount must be greater than 0",
-                  })}
-                  placeholder="e.g. 5000"
-                />
-                {errors.amount && (
-                  <p className="text-red-500 pt-1 text-sm">
-                    {errors.amount.message}
-                  </p>
-                )}
-              </div>
-              <Button
-                type="submit"
-                disabled={!isValid || !isDirty}
-                className="w-max float-right"
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
               >
-                Save Changes
-              </Button>
-            </form>
-          </DialogDescription>
+                Budget Name
+              </label>
+              <Input
+                id="name"
+                {...register("name", { required: "Budget name is required" })}
+                placeholder="e.g., Home Decor"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="amount"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Budget Amount
+              </label>
+              <Input
+                id="amount"
+                type="number"
+                {...register("amount", {
+                  required: "Budget amount is required",
+                  valueAsNumber: true,
+                  validate: (value) =>
+                    value > 0 || "Budget amount must be greater than 0",
+                })}
+                placeholder="e.g. 5000"
+              />
+              {errors.amount && (
+                <p className="text-red-500 pt-1 text-sm">
+                  {errors.amount.message}
+                </p>
+              )}
+            </div>
+            <Button
+              type="submit"
+              disabled={!isValid || !isDirty}
+              className="w-max float-right"
+            >
+              Save Changes
+            </Button>
+          </form>
         </DialogHeader>
         <Button
           variant={"destructive"}

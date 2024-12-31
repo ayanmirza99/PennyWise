@@ -14,7 +14,7 @@ function BudgetItem({ budget }) {
       <EditModal open={open} setOpen={setOpen} obj={budget} Table={Budgets} />
       <div
         onClick={() => setOpen(true)}
-        className="p-5 border rounded-2xl hover:shadow-md duration-150 ease-in-out cursor-pointer h-[170px] min-w-[300px] md:min-w-[390px]"
+        className={`p-5 border rounded-2xl hover:shadow-md duration-150 ease-in-out cursor-pointer h-[170px] min-w-[300px] md:min-w-[390px]`}
       >
         <div className="flex gap-2 items-center justify-between">
           <div className="flex gap-2 items-center">
@@ -42,7 +42,11 @@ function BudgetItem({ budget }) {
               Rs. {budget.totalSpend ? budget.totalSpend : 0} Spent
             </h2>
             <h2 className="text-xs text-slate-400">
-              Rs. {budget.amount - budget.totalSpend} Remaining
+              Rs.{" "}
+              {budget.amount - budget.totalSpend < 0
+                ? 0
+                : budget.amount - budget.totalSpend}{" "}
+              Remaining
             </h2>
           </div>
           <div
@@ -50,13 +54,21 @@ function BudgetItem({ budget }) {
               bg-slate-300 h-2 rounded-full"
           >
             <div
-              className="
-              bg-primary h-2 rounded-full"
+              className={`${
+                budget.amount - budget.totalSpend < 0
+                  ? "bg-red-600"
+                  : "bg-primary"
+              } h-2 rounded-full`}
               style={{
                 width: `${calculateProgressPerc()}%`,
               }}
             ></div>
           </div>
+          {budget.amount - budget.totalSpend < 0 && (
+            <div className="flex justify-center mt-1">
+              <p className="blink">Budget Exceeded</p>
+            </div>
+          )}
         </div>
       </div>
     </>

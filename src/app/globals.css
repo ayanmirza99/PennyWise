@@ -86,3 +86,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  color: #dc2626;
+  font-weight: 600;
+  animation: blink 1.5s infinite;
+  transition: all 50ms ease-in;
+}

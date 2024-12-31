@@ -19,7 +19,7 @@ function IncomeItem({ income }) {
               bg-slate-100 rounded-full 
               "
             >
-              {income.icon}
+              {income.Icon}
             </h2>
             <div>
               <h2 className="font-bold text-xl">{income.name}</h2>

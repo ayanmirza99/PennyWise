@@ -43,7 +43,7 @@ export const GlobalContextProvider = ({ children }) => {
         id: Incomes.id,
         amount: Incomes.amount,
         name: Incomes.name,
-        icon: Incomes.Icon
+        Icon: Incomes.Icon
       })
       .from(Incomes)
       .groupBy(Incomes.id);

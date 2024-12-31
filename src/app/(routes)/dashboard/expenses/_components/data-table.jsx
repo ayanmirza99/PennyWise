@@ -23,14 +23,17 @@ export function DataTable({ columns, data }) {
   });
 
   return (
-    <div className="rounded-md border mt-8 w-full lg:w-[60%]">
+    <div className="rounded-md border mt-8 w-full lg:w-[80%]">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead className="font-bold bg-slate-50" key={header.id}>
+                  <TableHead
+                    className="font-bold text-[16px] md:text-lg bg-slate-50"
+                    key={header.id}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -48,6 +51,7 @@ export function DataTable({ columns, data }) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                className="text-[14px] md:text-[16px]"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -59,7 +63,10 @@ export function DataTable({ columns, data }) {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-xl text-center"
+              >
                 No results.
               </TableCell>
             </TableRow>
