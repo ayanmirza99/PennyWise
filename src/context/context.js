@@ -4,7 +4,7 @@ import { db } from "../../utils/dbConfig";
 import { Budgets, expenses, Incomes } from "../../utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { useWindowWidth } from '@react-hook/window-size'
-import { sql, desc, eq } from "drizzle-orm";
+import { sql, desc, eq, asc } from "drizzle-orm";
 
 const GlobalContext = createContext();
 
@@ -61,7 +61,8 @@ export const GlobalContextProvider = ({ children }) => {
         createdAt: expenses.createdAt
       })
       .from(expenses)
-      .where(eq(expenses.createdBy, user?.primaryEmailAddress.emailAddress));
+      .where(eq(expenses.createdBy, user?.primaryEmailAddress.emailAddress))
+      .orderBy(desc(expenses.createdAt));
     setExpenseList(result);
   };
 

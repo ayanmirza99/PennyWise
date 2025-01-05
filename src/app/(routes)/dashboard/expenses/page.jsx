@@ -1,23 +1,105 @@
 "use client";
+
 import { useGlobalContext } from "@/context/context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./tableConfig";
 import { Button } from "@/components/ui/button";
 import AddExpense from "./_components/AddExpense";
+import { EllipsisVertical, Pen, Trash } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import LoaderButton from "@/app/_components/LoaderButton";
+import { db } from "../../../../../utils/dbConfig";
+import { expenses } from "../../../../../utils/schema";
+import { eq } from "drizzle-orm";
+import { toast } from "sonner";
 
 function ExpensesScreen() {
   const { getAllExpenses, expenseList, budgetList, getBudgetList } =
     useGlobalContext();
-  const [data, setData] = useState();
-  const [open, setOpen] = useState(false);
-  const { user } = useClerk();
-  useEffect(() => {
-    user && getAllExpenses();
-    if (!budgetList) {
-      getBudgetList();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const onDelete = async (id) => {
+    console.log(id);
+
+    setLoading(true);
+    try {
+      await db.delete(expenses).where(eq(expenses.id, id));
+      toast.success("Expense Deleted!");
+      await getAllExpenses();
+    } catch (error) {
+      console.log(error);
+      toast.error("Error Deleting Expense!");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const updatedColumns = [
+    ...columns,
+    {
+      accessorKey: "action",
+      header: "",
+      cell: ({ row }) => (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Pen className="w-5 h-5 text-primary" />
+          </DialogTrigger>
+          <DialogContent>
+            <AddExpense data={row.original} />
+          </DialogContent>
+        </Dialog>
+      ),
+    },
+    {
+      accessorKey: "action",
+      header: "",
+      cell: ({ row }) => (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Trash className="w-5 h-5 text-destructive cursor-pointer" />
+          </DialogTrigger>
+          <DialogContent>
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Confirm Deletion</h3>
+              <p className="">
+                Are you sure you want to delete this item? This action cannot be
+                undone.
+              </p>
+              <div className="flex justify-end space-x-2">
+                <DialogClose asChild>
+                  <Button variant="secondary">Cancel</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <LoaderButton
+                    loading={loading}
+                    className="bg-destructive hover:bg-destructive/90"
+                    buttonText={"Delete"}
+                    onClick={() => onDelete(row.original.id)}
+                  />
+                </DialogClose>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      ),
+    },
+  ];
+
+  const updateData = () => {
     if (expenseList && budgetList) {
       const filteredExpenses = expenseList
         .filter((expense) =>
@@ -35,17 +117,31 @@ function ExpensesScreen() {
         });
       setData(filteredExpenses);
     }
-  }, [user, expenseList]);
+  };
+
+  useEffect(() => {
+    getAllExpenses();
+    getBudgetList();
+  }, []);
+
+  useEffect(() => {
+    updateData();
+  }, [expenseList, budgetList]);
 
   return (
     <div className="p-4 md:p-10">
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-3xl">My Expenses</h2>
-        <Button onClick={() => setOpen(true)}>Add Expense</Button>
-        <AddExpense open={open} setOpen={setOpen} />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Add Expense</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AddExpense />
+          </DialogContent>
+        </Dialog>
       </div>
-      <DataTable columns={columns} data={data || []} />
-      <section className="w-full flex justify-center items-center"></section>
+      <DataTable columns={updatedColumns} data={data} />
     </div>
   );
 }

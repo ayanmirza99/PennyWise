@@ -1,13 +1,7 @@
 import { Trash } from "lucide-react";
 import React from "react";
-// import { toast } from "sonner";
-// import { db } from "../../../../../../utils/dbConfig";
-// import { eq } from "drizzle-orm";
-// import { expenses } from "../../../../../../utils/schema";
 
-function ExpenseListTable({ expenseList, refreshData }) {
-  console.log(expenseList);
-
+function ExpenseListTable({ expenseList }) {
   return (
     <div className="mt-3">
       <h2 className="font-bold text-lg">Latest Expenses</h2>
@@ -22,17 +16,9 @@ function ExpenseListTable({ expenseList, refreshData }) {
           <h2>{expenses.name}</h2>
           <h2>{expenses.expense}</h2>
           <h2>{expenses.createdAt}</h2>
-          <h2
-            // onClick={() => deleteExpense(expenses)}
-            className="text-red-500 cursor-pointer"
-          >
-            Delete
-          </h2>
+          <h2 className="text-red-500 cursor-pointer">Delete</h2>
           <h2>
-            <Trash
-              className="text-red-500 cursor-pointer"
-              //   onClick={() => deleteExpense(expenses)}
-            />
+            <Trash />
           </h2>
         </div>
       ))}

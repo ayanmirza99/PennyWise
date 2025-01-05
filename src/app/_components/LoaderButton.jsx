@@ -1,5 +1,6 @@
 import React from "react";
-import { cn } from "@/lib/utils"; // If you are using ShadCN's utility for conditional classes
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const LoaderButton = ({
   loading,
@@ -10,7 +11,7 @@ const LoaderButton = ({
   ...props
 }) => {
   return (
-    <button
+    <Button
       onClick={onClick}
       disabled={disabled || loading}
       className={cn(
@@ -42,7 +43,7 @@ const LoaderButton = ({
         </svg>
       )}
       <span>{buttonText}</span>
-    </button>
+    </Button>
   );
 };
 

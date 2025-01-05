@@ -2,30 +2,32 @@ export const columns = [
   {
     accessorKey: "name",
     header: "Name",
-    className: "w-48",
-    cell: ({ row }) => <div>{row.original.name || "-"}</div>,
+    cell: ({ row }) => <div>{row.getValue("name") || "-"}</div>,
   },
   {
     accessorKey: "expense",
     header: "Amount Spent",
+    cell: ({ row }) => <div>{row.getValue("expense") || "-"}</div>,
   },
   {
     accessorKey: "budget",
     header: "Spent On",
     cell: ({ row }) => (
-      <div>{row.original.Icon + " " + row.original.budgetName || "-"}</div>
+      <div>
+        {row.original.Icon} {row.original.budgetName || "-"}
+      </div>
     ),
   },
   {
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
-      console.log(row.original.createdAt);
+      const createdAt = row.getValue("createdAt");
       return (
         <div>
-          {row.original.createdAt.toLocaleDateString() +
-            " at " +
-            row.original.createdAt.toLocaleTimeString() || "-"}
+          {createdAt
+            ? `${new Date(createdAt).toLocaleDateString()} at ${new Date(createdAt).toLocaleTimeString()}`
+            : "-"}
         </div>
       );
     },
