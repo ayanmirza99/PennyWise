@@ -1,9 +1,6 @@
 "use client";
-
 import LoaderButton from "@/app/_components/LoaderButton";
 import {
-  Dialog,
-  DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -26,8 +23,6 @@ import { useClerk } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 
 const AddExpense = ({ data }) => {
-  console.log(data);
-
   const { user } = useClerk();
   const { budgetList, getAllExpenses } = useGlobalContext();
   const [loading, setLoading] = useState(false);

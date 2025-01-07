@@ -16,9 +16,11 @@ import { eq } from "drizzle-orm";
 import { toast } from "sonner";
 import { useGlobalContext } from "@/context/context";
 import { Trash } from "lucide-react";
+import LoaderButton from "@/app/_components/LoaderButton";
 
 const EditModal = ({ open, setOpen, obj, Table }) => {
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { getBudgetList, getIncomeList } = useGlobalContext();
 
   const {
@@ -39,6 +41,7 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
   }, [open, obj, reset]);
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       await db
         .update(Table)
@@ -61,10 +64,11 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
         `Error Updating ${Table === "Budgets" ? "Budget" : "Income"}!`
       );
     } finally {
+      setLoading(false);
       setOpen(false);
     }
   };
-  const deleteBudget = async () => {
+  const habdleDelete = async () => {
     try {
       await db.delete(Table).where(eq(Table.id, obj.id));
       toast.success(`${Table === "Budgets" ? "Budget" : "Income"} Deleted!`);
@@ -86,7 +90,9 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Budget</DialogTitle>
+          <DialogTitle>
+            Edit {Table === "Budgets" ? "Budget" : "Income"}
+          </DialogTitle>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
             <div>
               <Controller
@@ -128,7 +134,7 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Budget Name
+                {Table === "Budgets" ? "Budget" : "Income"} Name
               </label>
               <Input
                 id="name"
@@ -145,7 +151,7 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
                 htmlFor="amount"
                 className="block text-sm font-medium text-gray-700"
               >
-                Budget Amount
+                {Table === "Budgets" ? "Budget" : "Income"} Amount
               </label>
               <Input
                 id="amount"
@@ -164,21 +170,21 @@ const EditModal = ({ open, setOpen, obj, Table }) => {
                 </p>
               )}
             </div>
-            <Button
+            <LoaderButton
               type="submit"
               disabled={!isValid || !isDirty}
               className="w-max float-right"
-            >
-              Save Changes
-            </Button>
+              buttonText={"Save Changes"}
+              loading={loading}
+            />
           </form>
         </DialogHeader>
         <Button
           variant={"destructive"}
           className="w-max"
-          onClick={() => deleteBudget()}
+          onClick={() => habdleDelete()}
         >
-          <Trash /> Delete Budget
+          <Trash /> Delete {Table === "Budgets" ? "Budget" : "Income"}
         </Button>
       </DialogContent>
     </Dialog>

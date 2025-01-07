@@ -33,15 +33,12 @@ function ExpensesScreen() {
   const [loading, setLoading] = useState(false);
 
   const onDelete = async (id) => {
-    console.log(id);
-
     setLoading(true);
     try {
       await db.delete(expenses).where(eq(expenses.id, id));
       toast.success("Expense Deleted!");
       await getAllExpenses();
     } catch (error) {
-      console.log(error);
       toast.error("Error Deleting Expense!");
     } finally {
       setLoading(false);

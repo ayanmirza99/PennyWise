@@ -1,111 +1,147 @@
 "use client";
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import EmojiPicker from "emoji-picker-react";
-import { Button } from "@/components/ui/button";
+import LoaderButton from "@/app/_components/LoaderButton";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useGlobalContext } from "@/context/context";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { db } from "../../../../../../utils/dbConfig";
 import { Budgets } from "../../../../../../utils/schema";
-import { useUser } from "@clerk/nextjs";
-import { toast } from "sonner";
+import { useClerk } from "@clerk/nextjs";
+import { eq } from "drizzle-orm";
+import { Button } from "@/components/ui/button";
+import EmojiPicker from "emoji-picker-react";
+import { Trash2 } from "lucide-react";
 
-function CreateBudget({ refreshData }) {
-  const [emojiIcon, setEmojiIcon] = useState("😀");
+const CreateBudget = ({ data, close }) => {
+  const { user } = useClerk();
+  const { getBudgetList } = useGlobalContext();
+  const [emojiIcon, setEmojiIcon] = useState(data ? data.Icon : "😀");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const {
+    handleSubmit,
+    register,
+    reset,
+    setValue,
+    formState: { errors, isDirty },
+  } = useForm({
+    defaultValues: {
+      ...data,
+    },
+  });
 
-  const [name, setName] = useState();
-  const [amount, setAmount] = useState();
-
-  const { user } = useUser();
-  const onCreateBudget = async () => {
-    const result = await db.insert(Budgets).values({
-      name: name,
-      amount: amount,
-      createdBy: user?.primaryEmailAddress?.emailAddress,
-      Icon: emojiIcon,
-    });
-
-    if (result) {
-      refreshData();
-      toast.success("New Budget Created!");
+  const onSubmit = async (body) => {
+    setLoading(true);
+    try {
+      data
+        ? await db
+            .update(Budgets)
+            .set({
+              name: body.name,
+              amount: body.amount,
+              createdBy: user.primaryEmailAddress.emailAddress,
+              Icon: body.Icon,
+            })
+            .where(eq(Budgets.id, data.id))
+        : await db.insert(Budgets).values({
+            name: body.name,
+            amount: body.amount,
+            createdBy: user.primaryEmailAddress.emailAddress,
+            Icon: body.Icon || emojiIcon,
+          });
+      getBudgetList();
+      toast.success(data ? "Budget Updated" : "Budget Created!");
+    } catch (error) {
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+      reset();
+      close();
     }
   };
+
+  const onDelete = async () => {
+    try {
+      await db.delete(Budgets).where(eq(Budgets.id, data.id));
+      toast.success("Budget Deleted!");
+      await getBudgetList();
+    } catch (error) {
+      toast.error("Error Deleting Budget!");
+    } finally {
+      close();
+    }
+  };
+
   return (
-    <div>
-      <Dialog>
-        <DialogTrigger asChild>
-          <div
-            className="bg-slate-100 p-10 rounded-2xl min-w-[300px] md:min-w-[390px]
-            items-center flex flex-col border-2 border-dashed
-            cursor-pointer hover:shadow-md duration-150 ease-in-out"
+    <DialogHeader>
+      <DialogTitle>{data ? "Edit Budget" : "Create Budget"}</DialogTitle>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mt-2">
+          <p
+            className="text-lg border-2 cursor-pointer w-max p-3 rounded-md"
+            onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
           >
-            <h2 className="text-3xl">+</h2>
-            <h2>Create New Budget</h2>
+            {emojiIcon}
+          </p>
+          <div className="absolute z-20">
+            <EmojiPicker
+              open={openEmojiPicker}
+              onEmojiClick={(e) => {
+                setValue("Icon", e.emoji, { shouldDirty: true });
+                setEmojiIcon(e.emoji);
+                setOpenEmojiPicker(false);
+              }}
+            />
           </div>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Budget</DialogTitle>
-            <DialogDescription>
-              <div className="mt-5">
-                <Button
-                  variant="outline"
-                  className="text-lg"
-                  onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
-                >
-                  {emojiIcon}
-                </Button>
-                <div className="absolute z-20">
-                  <EmojiPicker
-                    open={openEmojiPicker}
-                    onEmojiClick={(e) => {
-                      setEmojiIcon(e.emoji);
-                      setOpenEmojiPicker(false);
-                    }}
-                  />
-                </div>
-                <div className="mt-2">
-                  <h2 className="text-black font-medium my-1">Budget Name</h2>
-                  <Input
-                    placeholder="e.g. Home Decor"
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-                <div className="mt-2">
-                  <h2 className="text-black font-medium my-1">Budget Amount</h2>
-                  <Input
-                    type="number"
-                    placeholder="e.g. Rs. 5000"
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
-                </div>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="sm:justify-start">
-            <DialogClose asChild>
-              <Button
-                disabled={!(name && amount)}
-                onClick={() => onCreateBudget()}
-                className="mt-5 w-full rounded-full"
-              >
-                Create Budget
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+          <div className="mt-2">
+            <h2 className="text-black font-medium my-1">Budget Name</h2>
+            <Input
+              {...register("name", { required: "Name is required" })}
+              placeholder="e.g., Home Decor"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
+            )}
+          </div>
+          <div className="mt-2">
+            <h2 className="text-black font-medium my-1">Allot Amount</h2>
+            <Input
+              type="number"
+              {...register("amount", { required: "Amount is required" })}
+              placeholder="e.g., 5000"
+            />
+            {errors.amount && (
+              <p className="text-red-500 text-sm">{errors.amount.message}</p>
+            )}
+          </div>
+          {data && (
+            <div className="mt-2">
+            <h2 className="text-black font-medium my-1">Total Spent</h2>
+            <Input
+              value={data.totalSpend}
+              disabled
+            />
+          </div>
+          )}
+        </div>
+        <div className="w-full flex justify-end mt-4">
+          <LoaderButton
+            loading={loading}
+            buttonText={data ? "Edit Budget" : "Create"}
+            type="submit"
+            disabled={!isDirty}
+          />
+        </div>
+      </form>
+      {data && (
+        <Button variant="destructive" onClick={onDelete} className="w-max">
+          <Trash2 className="w-5 h-5" /> Delete Budget
+        </Button>
+      )}
+    </DialogHeader>
   );
-}
+};
 
 export default CreateBudget;

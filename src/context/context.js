@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import { db } from "../../utils/dbConfig";
 import { Budgets, expenses, Incomes } from "../../utils/schema";
 import { useUser } from "@clerk/nextjs";
-import { useWindowWidth } from '@react-hook/window-size'
+import { useWindowWidth } from "@react-hook/window-size";
 import { sql, desc, eq, asc } from "drizzle-orm";
 
 const GlobalContext = createContext();
@@ -34,7 +34,7 @@ export const GlobalContextProvider = ({ children }) => {
       .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
       .groupBy(Budgets.id)
       .orderBy(desc(Budgets.id));
-    setBudgetList(result);
+    result.length > 0 ? setBudgetList(result) : setBudgetList("");
   };
 
   const getIncomeList = async () => {
@@ -43,11 +43,11 @@ export const GlobalContextProvider = ({ children }) => {
         id: Incomes.id,
         amount: Incomes.amount,
         name: Incomes.name,
-        Icon: Incomes.Icon
+        Icon: Incomes.Icon,
       })
       .from(Incomes)
       .groupBy(Incomes.id);
-    result.length > 0 ? setIncomeList(result) : setIncomeList('')
+    result.length > 0 ? setIncomeList(result) : setIncomeList("");
   };
 
   const getAllExpenses = async () => {
@@ -58,7 +58,7 @@ export const GlobalContextProvider = ({ children }) => {
         expense: expenses.amount,
         createdBy: expenses.createdBy,
         budgetId: expenses.budgetId,
-        createdAt: expenses.createdAt
+        createdAt: expenses.createdAt,
       })
       .from(expenses)
       .where(eq(expenses.createdBy, user?.primaryEmailAddress.emailAddress))
