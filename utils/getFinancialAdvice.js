@@ -61,6 +61,7 @@ async function run(budgetList, incomeList, expenseList) {
 
   const result = await chatSession.sendMessage(userPrompt);
   const res = result.response.text();
+  console.log(await chatSession.getHistory());
 
   return res;
 }

@@ -6,7 +6,6 @@ const CardInfo = ({ budgetList, incomeList, expenseList }) => {
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalSpend, setTotalSpend] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
-  // const [financialAdvice, setFinancialAdvice] = useState("");
 
   useEffect(() => {
     if (
@@ -18,21 +17,6 @@ const CardInfo = ({ budgetList, incomeList, expenseList }) => {
     }
   }, [budgetList, incomeList, expenseList]);
 
-  // useEffect(() => {
-  //   if (totalBudget > 0 || totalIncome > 0 || totalSpend > 0) {
-  //     const fetchFinancialAdvice = async () => {
-  //       const advice = await getFinancialAdvice(
-  //         totalBudget,
-  //         totalIncome,
-  //         totalSpend
-  //       );
-  //       setFinancialAdvice(advice);
-  //     };
-
-  //     fetchFinancialAdvice();
-  //   }
-  // }, [totalBudget, totalIncome, totalSpend]);
-
   const CalculateCardInfo = () => {
     let totalBudget_ = 0;
     let totalSpend_ = 0;
@@ -42,9 +26,10 @@ const CardInfo = ({ budgetList, incomeList, expenseList }) => {
       totalBudget_ = totalBudget_ + Number(elem.amount);
     });
 
-    incomeList !== '' && incomeList.forEach((elem) => {
-      totalIncome_ = totalIncome_ + Number(elem.amount);
-    });
+    incomeList !== "" &&
+      incomeList.forEach((elem) => {
+        totalIncome_ = totalIncome_ + Number(elem.amount);
+      });
 
     expenseList.forEach((elem) => {
       totalSpend_ = totalSpend_ + Number(elem.expense);

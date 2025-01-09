@@ -8,9 +8,11 @@ import BudgetItem from "./budgets/_components/BudgetItem";
 import Link from "next/link";
 import { useGlobalContext } from "@/context/context";
 import run from "../../../../utils/getFinancialAdvice";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const page = () => {
   const { user } = useUser();
+  const [loading, setLoading] = useState(false);
 
   const {
     budgetList,
@@ -30,8 +32,15 @@ const page = () => {
   useEffect(() => {
     const fetchAdvice = async () => {
       if (budgetList.length > 0) {
-        const result = await run(budgetList, incomeList, expenseList);
-        setAdvice(result); // Update the state with the result
+        setLoading(true);
+        try {
+          const result = await run(budgetList, incomeList, expenseList);
+          setAdvice(result); // Update the state with the result
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
@@ -47,15 +56,23 @@ const page = () => {
           </h1>
           <p className="text-gray-500 font-semibold text-lg">
             Here's what is happenning with your money, Lets Manage your
-            expenses.
+            finances.
           </p>
         </section>
         <section className="w-full md:max-w-[90%] h-max flex flex-col gap-6 border shadow-md rounded-xl p-4">
           <div className="flex gap-4 items-center">
-            <Sparkle />
+            <Sparkle className={`text-primary ${loading && "rotate"}`} />
             <h1 className="font-semibold text-2xl">Alfred</h1>
           </div>
-          <div className="min-h-[8rem]">{advice}</div>
+          <div className="min-h-[8rem] text-[16px] md:text-xl text-gray-700 cursor-pointer leading-8">
+            {loading && (
+              <div className="space-y-3">
+                <Skeleton className="h-8 w-[90%] " />
+                <Skeleton className="h-8 w-[60%]" />
+              </div>
+            )}
+            {advice}
+          </div>
         </section>
 
         <section className="w-full flex flex-wrap gap-4">
