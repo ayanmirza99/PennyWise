@@ -5,6 +5,7 @@ import {
   MenuIcon,
   PiggyBank,
   ReceiptText,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -34,6 +35,11 @@ const SideNav = ({ expand, mobileScreen, setExpand }) => {
       name: "Expenses",
       icon: <ReceiptText size={mobileScreen ? 24 : 32} />,
       path: "/dashboard/expenses",
+    },
+    {
+      name: "Alfred",
+      icon: <Sparkles size={mobileScreen ? 24 : 32} />,
+      path: "/dashboard/alfred",
     },
   ];
 

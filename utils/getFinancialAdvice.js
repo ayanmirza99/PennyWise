@@ -14,7 +14,7 @@ const generationConfig = {
   responseMimeType: "text/plain",
 };
 
-async function run(budgetList, incomeList, expenseList) {
+async function getFinancialAdvice(budgetList, incomeList, expenseList) {
   const totalBudget = budgetList?.map((budget) => ({
     item: budget.name,
     amount: parseInt(budget.amount, 10),
@@ -66,4 +66,4 @@ async function run(budgetList, incomeList, expenseList) {
   return res;
 }
 
-export default run;
+export default getFinancialAdvice;

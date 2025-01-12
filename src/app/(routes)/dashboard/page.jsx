@@ -7,8 +7,8 @@ import BarChart from "./_components/BarChart";
 import BudgetItem from "./budgets/_components/BudgetItem";
 import Link from "next/link";
 import { useGlobalContext } from "@/context/context";
-import run from "../../../../utils/getFinancialAdvice";
 import { Skeleton } from "@/components/ui/skeleton";
+import getFinancialAdvice from "../../../../utils/getFinancialAdvice";
 
 const page = () => {
   const { user } = useUser();
@@ -34,8 +34,12 @@ const page = () => {
       if (budgetList.length > 0) {
         setLoading(true);
         try {
-          const result = await run(budgetList, incomeList, expenseList);
-          setAdvice(result); // Update the state with the result
+          const result = await getFinancialAdvice(
+            budgetList,
+            incomeList,
+            expenseList
+          );
+          setAdvice(result);
         } catch (error) {
           console.log(error);
         } finally {
@@ -44,8 +48,8 @@ const page = () => {
       }
     };
 
-    fetchAdvice(); // Call the async function inside useEffect
-  }, [budgetList, incomeList, expenseList, run]);
+    fetchAdvice();
+  }, [budgetList, incomeList, expenseList, getFinancialAdvice]);
 
   return (
     <>
