@@ -1,14 +1,14 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
-import { Sparkle } from "lucide-react";
+import getFinancialAdvice from "../../../../utils/getFinancialAdvice";
+import BudgetItem from "./budgets/_components/BudgetItem";
+import { useGlobalContext } from "@/context/context";
+import { Skeleton } from "@/components/ui/skeleton";
 import React, { useEffect, useState } from "react";
 import CardInfo from "./_components/CardInfo";
 import BarChart from "./_components/BarChart";
-import BudgetItem from "./budgets/_components/BudgetItem";
+import { useUser } from "@clerk/nextjs";
+import { Sparkle } from "lucide-react";
 import Link from "next/link";
-import { useGlobalContext } from "@/context/context";
-import { Skeleton } from "@/components/ui/skeleton";
-import getFinancialAdvice from "../../../../utils/getFinancialAdvice";
 
 const page = () => {
   const { user } = useUser();
@@ -71,7 +71,7 @@ const page = () => {
           <div className="min-h-[8rem] text-[16px] md:text-xl text-gray-700 cursor-pointer leading-8">
             {loading && (
               <div className="space-y-3">
-                <Skeleton className="h-8 w-[90%] " />
+                <Skeleton className="h-8 w-[90%]" />
                 <Skeleton className="h-8 w-[60%]" />
               </div>
             )}
