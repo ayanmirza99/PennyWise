@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import React, { useEffect, useState } from "react";
 import CardInfo from "./_components/CardInfo";
 import BarChart from "./_components/BarChart";
+import ReactMarkdown from "react-markdown";
 import { useUser } from "@clerk/nextjs";
 import { Sparkle } from "lucide-react";
 import Link from "next/link";
@@ -75,7 +76,7 @@ const page = () => {
                 <Skeleton className="h-8 w-[60%]" />
               </div>
             )}
-            {advice}
+            <ReactMarkdown>{advice}</ReactMarkdown>
           </div>
         </section>
 

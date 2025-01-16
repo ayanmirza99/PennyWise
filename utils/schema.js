@@ -5,6 +5,7 @@ import {
   serial,
   varchar,
   timestamp,
+  text,
 } from "drizzle-orm/pg-core";
 
 // budget schema
@@ -31,6 +32,14 @@ export const expenses = pgTable("expenses", {
   name: varchar("name").notNull(),
   amount: numeric("amount").notNull(),
   budgetId: integer("budgetId").references(() => Budgets.id),
+  createdBy: varchar("createdBy").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
+export const chats = pgTable("chats", {
+  id: varchar("id").notNull(),
+  question: text("question").notNull(),
+  answer: text("answer").notNull(),
   createdBy: varchar("createdBy").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });

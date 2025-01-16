@@ -1,19 +1,12 @@
 "use client";
 
 import { useGlobalContext } from "@/context/context";
-import { useEffect, useState, useCallback } from "react";
-import { useClerk } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./tableConfig";
 import { Button } from "@/components/ui/button";
 import AddExpense from "./_components/AddExpense";
-import { EllipsisVertical, Pen, Trash } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Pen, Trash } from "lucide-react";
 import {
   Dialog,
   DialogClose,
