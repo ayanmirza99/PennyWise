@@ -1,9 +1,6 @@
 "use client";
 import LoaderButton from "@/app/_components/LoaderButton";
-import {
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -40,26 +37,28 @@ const AddExpense = ({ data }) => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (body) => {
     setLoading(true);
     try {
       data
         ? await db
             .update(expenses)
             .set({
-              name: data.name,
-              amount: data.amount,
-              budgetId: parseFloat(data.budgetId),
+              name: body.name,
+              amount: body.amount,
+              budgetId: parseFloat(body.budgetId),
               createdBy: user.primaryEmailAddress.emailAddress,
-              createdAt: data.createdAt,
+              createdAt: body.createdAt,
+              updatedAt: new Date(),
             })
             .where(eq(expenses.id, data.id))
         : await db.insert(expenses).values({
-            name: data.name,
-            amount: data.amount,
-            budgetId: parseFloat(data.budgetId),
+            name: body.name,
+            amount: parseFloat(body.amount),
+            budgetId: parseFloat(body.budgetId),
             createdBy: user.primaryEmailAddress.emailAddress,
             createdAt: new Date(),
+            updatedAt: new Date(),
           });
       getAllExpenses();
       toast.success("Expense Added!");

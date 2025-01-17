@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 import Chat from "./Chat";
+import SavedChats from "./SavedChats";
 
 const page = () => {
   return (
@@ -13,7 +14,9 @@ const page = () => {
       <TabsContent className="h-full w-full" value="chat">
         <Chat />
       </TabsContent>
-      <TabsContent value="savedChats">Change your password here.</TabsContent>
+      <TabsContent className="h-full w-full" value="savedChats">
+        <SavedChats />
+      </TabsContent>
     </Tabs>
   );
 };

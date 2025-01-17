@@ -34,6 +34,7 @@ export const expenses = pgTable("expenses", {
   budgetId: integer("budgetId").references(() => Budgets.id),
   createdBy: varchar("createdBy").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull(),
 });
 
 export const chats = pgTable("chats", {

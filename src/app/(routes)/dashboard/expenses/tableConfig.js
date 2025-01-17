@@ -26,7 +26,31 @@ export const columns = [
       return (
         <div>
           {createdAt
-            ? `${new Date(createdAt).toLocaleDateString()} at ${new Date(createdAt).toLocaleTimeString()}`
+            ? `${new Date(createdAt).toLocaleDateString()} at ${new Date(
+                createdAt
+              ).toLocaleTimeString(undefined, {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}`
+            : "-"}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Updated At",
+    cell: ({ row }) => {
+      const updatedAt = row.getValue("updatedAt");
+      return (
+        <div>
+          {updatedAt
+            ? `${new Date(updatedAt).toLocaleDateString()} at ${new Date(
+                updatedAt
+              ).toLocaleTimeString(undefined, {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}`
             : "-"}
         </div>
       );

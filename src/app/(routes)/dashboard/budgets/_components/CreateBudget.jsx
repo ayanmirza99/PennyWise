@@ -58,7 +58,6 @@ const CreateBudget = ({ data, close }) => {
     } finally {
       setLoading(false);
       reset();
-      close();
     }
   };
 
@@ -118,12 +117,9 @@ const CreateBudget = ({ data, close }) => {
           </div>
           {data && (
             <div className="mt-2">
-            <h2 className="text-black font-medium my-1">Total Spent</h2>
-            <Input
-              value={data.totalSpend}
-              disabled
-            />
-          </div>
+              <h2 className="text-black font-medium my-1">Total Spent</h2>
+              <Input value={data.totalSpend || 0} disabled />
+            </div>
           )}
         </div>
         <div className="w-full flex justify-end mt-4">

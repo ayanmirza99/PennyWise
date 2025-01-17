@@ -65,9 +65,15 @@ export function DataTable({ columns, data }) {
             <TableRow>
               <TableCell
                 colSpan={columns.length}
-                className="h-24 text-xl text-center"
               >
-                No results.
+                <div className="text-2xl min-w-[280px] md:min-w-[350px] h-[50vh] flex items-center justify-center flex-col gap-2 font-semibold">
+                  <img
+                    src="/Empty.svg"
+                    alt=""
+                    className="w-full h-[80%] object-contain object-center"
+                  />
+                  <h1>You have no Expenses</h1>
+                </div>
               </TableCell>
             </TableRow>
           )}

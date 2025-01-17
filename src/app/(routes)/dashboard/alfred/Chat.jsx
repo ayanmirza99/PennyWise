@@ -32,12 +32,10 @@ const Chat = () => {
   } = useGlobalContext();
 
   useEffect(() => {
-    if (user) {
-      !budgetList && getBudgetList();
-      !expenseList && getAllExpenses();
-      !incomeList && getIncomeList();
-    }
-  }, [user]);
+    getBudgetList();
+    getAllExpenses();
+    getIncomeList();
+  }, []);
 
   const onSent = () => {
     const newMessage = {
@@ -94,6 +92,7 @@ const Chat = () => {
     const messageId = onSent();
     setLoadingMessageId(messageId);
     try {
+      console.log(budgetList, incomeList, expenseList);
       const resp = await chat(budgetList, incomeList, expenseList, prompt);
       setData((prevData) =>
         prevData.map((message) =>
@@ -117,7 +116,12 @@ const Chat = () => {
   return (
     <div className="w-full p-2 pt-0 md:pt-0 md:py-6 md:px-10 h-full flex flex-col items-center overflow-hidden">
       {budgetList === "" || incomeList === "" || expenseList === "" ? (
-        <Triangle />
+        <Triangle
+          height="80"
+          width="80"
+          color="#4845d2"
+          ariaLabel="triangle-loading"
+        />
       ) : (
         <>
           {data.length === 0 ? (
@@ -173,7 +177,11 @@ const Chat = () => {
                       {saveLoadingMessageId === message.id ? (
                         <Triangle height={24} width={24} color="#4845d2" />
                       ) : message.isSaved ? (
-                        <Bookmark onClick={() => deleteChat(message.id)}  fill="#4845d2" color="#4845d2" />
+                        <Bookmark
+                          onClick={() => deleteChat(message.id)}
+                          fill="#4845d2"
+                          color="#4845d2"
+                        />
                       ) : (
                         <Bookmark onClick={() => saveChat(message.id)} />
                       )}
