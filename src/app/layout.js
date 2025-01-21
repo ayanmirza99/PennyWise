@@ -3,6 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { GlobalContextProvider } from "@/context/context";
 import { Toaster } from "sonner";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +17,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning>
         <ClerkProvider>
+          <NextTopLoader
+            color="#4845D2"
+            showSpinner={false}
+            shadow={false}
+            height={5}
+          />
           <GlobalContextProvider>
             {children}
             <Toaster

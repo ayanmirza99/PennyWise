@@ -47,9 +47,9 @@ const SideNav = ({ expand, mobileScreen, setExpand }) => {
     <>
       {mobileScreen ? (
         <div
-          className={`absolute z-10 h-screen w-full sm:w-[300px] ${
+          className={`absolute z-40 h-screen w-full sm:w-[300px] ${
             expand ? "left-0" : `-left-[700px] sm:-left-[300px]`
-          } top-0 px-4 pt-44 border-r transition-all ease-in-out duration-200 bg-[#f0f4f9]`}
+          } top-0 px-4 pt-28 border-r transition-all ease-in-out duration-200 bg-[#f0f4f9]`}
         >
           <div
             className={`flex flex-col items-start xs:items-center gap-12 text-lg font-semibold cursor-pointer transition-all`}
