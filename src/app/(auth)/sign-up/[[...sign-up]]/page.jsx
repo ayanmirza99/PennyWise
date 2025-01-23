@@ -1,9 +1,8 @@
-import { SignUp } from '@clerk/nextjs'
-import React from 'react'
+import { SignUp } from "@clerk/nextjs";
+import React from "react";
 
 const page = () => {
   return (
-
     <section className="bg-white">
       <div className="flex flex-col-reverse h-max lg:grid lg:min-h-screen lg:grid-cols-12">
         <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
@@ -28,13 +27,13 @@ const page = () => {
               </a>
 
               <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                Welcome to Expense Tracker 🦑
+                Welcome to Pennywise 🦑
               </h1>
-
+              {/* 
               <p className="mt-4 leading-relaxed text-gray-500">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
-              </p>
+              </p> */}
             </div>
             <SignUp />
           </div>
@@ -46,11 +45,9 @@ const page = () => {
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
         </section>
-
-
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default page
+export default page;

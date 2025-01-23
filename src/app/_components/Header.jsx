@@ -38,7 +38,7 @@ const Header = () => {
         </div>
       </section>
       <section className="w-full px-3 md:p-3 flex items-center justify-between border-b shadow-sm">
-        <div className="flex items-center text-primary font-bold text-2xl md:text-3xl">
+        <div className="flex z-40 items-center text-primary font-bold text-2xl md:text-3xl">
           <div className="h-12 w-20 md:h-16 md:w-24 flex items-center -ml-6 md:-ml-0 justify-center overflow-hidden">
             <img src="/logo.png" alt="logo" />
           </div>

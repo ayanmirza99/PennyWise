@@ -22,7 +22,7 @@ export function Hero() {
         <ContainerScroll
           titleComponent={
             <>
-              <h1 className="text-4xl font-bold text-black dark:text-white">
+              <h1 className="text-4xl font-bold text-black dark:text-white cursor-pointer">
                 Manage your Money with AI-Driven Personal
                 <br />
                 <span className="text-6xl text-primary md:text-[6rem] font-extrabold mt-8 md:mt-4 leading-none">
