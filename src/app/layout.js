@@ -1,11 +1,8 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { GlobalContextProvider } from "@/context/context";
 import { Toaster } from "sonner";
 import NextTopLoader from "nextjs-toploader";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "PennyWise",
