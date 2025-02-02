@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React from "react";
 
 const AIFeature = () => {
@@ -35,9 +36,11 @@ const AIFeature = () => {
           </p>
 
           <div className="pt-4">
-            <Button className="bg-primary text-lg hover:bg-primary/90">
-              Get Started with Alfred
-            </Button>
+            <Link href={"/sign-up"}>
+              <Button className="bg-primary text-lg hover:bg-primary/90">
+                Get Started with Alfred
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
