@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGlobalContext } from "@/context/context";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { db } from "../../../../../../utils/dbConfig";

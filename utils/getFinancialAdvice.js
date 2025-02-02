@@ -15,18 +15,22 @@ const generationConfig = {
 };
 
 async function getFinancialAdvice(budgetList, incomeList, expenseList) {
-  const totalBudget = budgetList?.map((budget) => ({
+  let budgetArray = Array.isArray(budgetList) ? budgetList : [];
+  let incomeArray = Array.isArray(incomeList) ? incomeList : [];
+  let expenseArray = Array.isArray(expenseList) ? expenseList : [];
+
+  const totalBudget = budgetArray?.map((budget) => ({
     item: budget.name,
     amount: parseInt(budget.amount, 10),
     id: budget.id,
   }));
 
-  const totalIncome = incomeList?.map((income) => ({
+  const totalIncome = incomeArray?.map((income) => ({
     item: income.name,
     amount: parseInt(income.amount, 10),
   }));
 
-  const totalSpend = expenseList?.map((expense) => ({
+  const totalSpend = expenseArray?.map((expense) => ({
     item: expense.name,
     budgetId: expense.budgetId,
     amount: parseInt(expense.expense, 10),
@@ -50,8 +54,9 @@ async function getFinancialAdvice(budgetList, incomeList, expenseList) {
 
         Instructions:
 
-        1.  If any of the lists are empty, respond with: "No financial data provided. Please input your income, budget, and expenses for analysis."
-        2.  Otherwise:
+        1.  If all of the lists are empty, respond with: "No financial data provided. Please input your income, budget, and expenses for analysis."
+        2. All data is in Pakistani rupees.
+        3.  Otherwise:
             a. Calculate total budget, income, and expenses.
             b. Analyze the user's financial situation based on these totals, including cash flow, budget adherence, and any potential issues or warnings like budget overflow.
             c. Provide two concise, actionable pieces of financial advice.
@@ -61,7 +66,6 @@ async function getFinancialAdvice(budgetList, incomeList, expenseList) {
 
   const result = await chatSession.sendMessage(userPrompt);
   const res = result.response.text();
-  console.log(await chatSession.getHistory());
 
   return res;
 }

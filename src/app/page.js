@@ -16,7 +16,7 @@ export default function page() {
         <Features />
       </div>
       <div className="relative min-h-screen w-full flex justify-end items-center">
-        <div className="absolute top-0 left-0 h-full w-full md:w-1/2 overflow-hidden">
+        <div className="absolute bottom-0 left-0 h-full w-full md:w-1/2 overflow-hidden">
           <Waves className="w-full h-full" />
         </div>
         <div className="w-full h-full md:w-1/2">

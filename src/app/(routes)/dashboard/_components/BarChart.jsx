@@ -19,7 +19,20 @@ const BarChart = ({ budgetList }) => {
         <h1 className="text-2xl font-semibold">Activity</h1>
       </div>
       <ResponsiveContainer width={"100%"} height={350}>
-        {budgetList.length > 0 ? (
+        {!Array.isArray(budgetList) || budgetList.length === 0 ? (
+          <div className="w-full h-full flex items-center justify-center text-2xl font-semibold">
+            {budgetList.length === 0 ? (
+              "No Activity as of now."
+            ) : (
+              <Triangle
+                height="80"
+                width="80"
+                color="#4845d2"
+                ariaLabel="triangle-loading"
+              />
+            )}
+          </div>
+        ) : (
           <RechartsBarChart data={budgetList} margin={{ top: 14 }}>
             <CartesianGrid stroke="#f5f5f5" />
             <XAxis dataKey="name" />
@@ -33,7 +46,7 @@ const BarChart = ({ budgetList }) => {
             <Tooltip />
             <Legend />
             <Bar dataKey="totalSpend" stackId="b" fill="#45d248">
-              {budgetList.map((entry, index) => (
+              {budgetList?.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={
@@ -44,20 +57,6 @@ const BarChart = ({ budgetList }) => {
             </Bar>
             <Bar dataKey="amount" stackId="a" fill="#4845d2" />
           </RechartsBarChart>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-2xl font-semibold">
-            <Triangle
-              height="80"
-              width="80"
-              color="#4845d2"
-              ariaLabel="triangle-loading"
-            />
-          </div>
-        )}
-        {budgetList.length === 0 && (
-          <div className="w-full h-full flex items-center justify-center text-2xl font-semibold">
-            No Activity as of now.
-          </div>
         )}
       </ResponsiveContainer>
     </div>

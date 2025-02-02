@@ -124,13 +124,14 @@ function ExpensesScreen() {
         <h2 className="font-bold text-3xl">My Expenses</h2>
         <Dialog>
           <DialogTrigger asChild>
-            <Button>Add Expense</Button>
+            {Array.isArray(budgetList) && <Button>Add Expense</Button>}
           </DialogTrigger>
           <DialogContent>
             <AddExpense />
           </DialogContent>
         </Dialog>
       </div>
+      {!Array.isArray(budgetList) && <h1 className="pt-2 blink">Add Budgets in order to add expenses.</h1>}
       <DataTable columns={updatedColumns} data={data} />
     </div>
   );

@@ -32,20 +32,18 @@ const page = () => {
 
   useEffect(() => {
     const fetchAdvice = async () => {
-      if (budgetList.length > 0) {
-        setLoading(true);
-        try {
-          const result = await getFinancialAdvice(
-            budgetList,
-            incomeList,
-            expenseList
-          );
-          setAdvice(result);
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setLoading(false);
-        }
+      setLoading(true);
+      try {
+        const result = await getFinancialAdvice(
+          budgetList,
+          incomeList,
+          expenseList
+        );
+        setAdvice(result);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -79,14 +77,15 @@ const page = () => {
             <ReactMarkdown>{advice}</ReactMarkdown>
           </div>
         </section>
-
-        <section className="w-full flex flex-wrap gap-4">
-          <CardInfo
-            budgetList={budgetList}
-            incomeList={incomeList}
-            expenseList={expenseList}
-          />
-        </section>
+        {(budgetList !== "" && incomeList !== "" && expenseList !== "") && (
+          <section className="w-full flex flex-wrap gap-4">
+            <CardInfo
+              budgetList={budgetList}
+              incomeList={incomeList}
+              expenseList={expenseList}
+            />
+          </section>
+        )}
 
         <section className="w-full flex flex-wrap">
           <div className="w-full lg:w-2/3 rounded-2xl border shadow-md">
@@ -97,7 +96,7 @@ const page = () => {
               href="/dashboard/budgets"
               className="w-full lg:w-1/3 min-w-[350px] flex flex-wrap gap-6 p-4"
             >
-              <h1 className="text-2xl font-semibold">Latest Budgets</h1>
+              <h1 className="text-2xl h-max font-semibold">Latest Budgets</h1>
               <div className="flex flex-wrap gap-4">
                 {budgetList.slice(0, 2).map((budget, index) => (
                   <BudgetItem budget={budget} key={index} />

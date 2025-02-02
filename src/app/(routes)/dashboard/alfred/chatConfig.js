@@ -20,18 +20,22 @@ async function chat(budgetList, incomeList, expenseList, prompt) {
     history: [],
   });
 
-  const totalBudget = budgetList?.map((budget) => ({
+  let budgetArray = Array.isArray(budgetList) ? budgetList : [];
+  let incomeArray = Array.isArray(incomeList) ? incomeList : [];
+  let expenseArray = Array.isArray(expenseList) ? expenseList : [];
+  
+  const totalBudget = budgetArray?.map((budget) => ({
     item: budget.name,
     amount: parseInt(budget.amount, 10),
     id: budget.id,
   }));
 
-  const totalIncome = incomeList?.map((income) => ({
+  const totalIncome = incomeArray?.map((income) => ({
     item: income.name,
     amount: parseInt(income.amount, 10),
   }));
 
-  const totalSpend = expenseList?.map((expense) => ({
+  const totalSpend = expenseArray?.map((expense) => ({
     item: expense.name,
     budgetId: expense.budgetId,
     amount: parseInt(expense.expense, 10),
@@ -67,10 +71,13 @@ async function chat(budgetList, incomeList, expenseList, prompt) {
   5. **Avoid Redundancy**:
      - Do not repeat greetings, introductions, or financial analysis unnecessarily.
 
-  6. **Prompt**:
+  6. **Currency**
+     - All data is in Pakistani rupees.
+
+  7. **Prompt**:
      ${prompt}
 
-  Respond professionally, analyzing the user's financial data or answering their questions **only when prompted**. For greetings or chitchat, keep responses simple and avoid financial analysis unless explicitly requested.
+  Respond professionally, analyzing the user's financial data or answering their questions **only when prompted**. For greetings or chitchat, keep responses simple and avoid financial analysis unless explicitly requested. If no data is provided then response appropriately.
 `;
 
   const result = await chatSession.sendMessage(userPrompt);
